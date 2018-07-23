@@ -104,7 +104,7 @@ public class ThreadDemo {
                 public void run() {
                     int length = SIZE/countThread;
                     for (int j = 0; j < length-1; j++) {
-                        localArr[INDEX][j] = (float)(localArr[INDEX][j] * Math.sin(0.2f + j / 5) * Math.cos(0.2f + j / 5) * Math.cos(0.4f + j / 2));
+                        localArr[INDEX][j] = (float)(localArr[INDEX][j] * Math.sin(0.2f + (j+length*INDEX) / 5) * Math.cos(0.2f + (j+length*INDEX) / 5) * Math.cos(0.4f + (j+length*INDEX) / 2));
 
                     }
                 }
