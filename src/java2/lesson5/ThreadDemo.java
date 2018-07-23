@@ -75,11 +75,11 @@ public class ThreadDemo {
         long a,b,c,d;                           //обявляем переменные для фиксирования времени выполнения: разбивки массива, просчета и склейки.
 
         a = System.currentTimeMillis();         //засекаем время начала обработки массива
-
+        Thread[] th = new Thread[countThread];
         float[][] localArr = new float[countThread][];  //определяем двухмерный массив, используемый для разбивки arr. Размерность двухмерного массива равна кол-ву потоков.
         for (int i = 0; i < countThread; i++) {         //внешний цикл для создания countThread потоков и локальных массивов
             final int INDEX = i;
-            Thread th = new Thread(new Runnable() {
+            th[INDEX] = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     int length = SIZE/countThread;          //размер локального массива localArr[INDEX]
@@ -88,17 +88,18 @@ public class ThreadDemo {
                     System.arraycopy(arr,scrPos,localArr[INDEX],0,length); //копируем данные в localArr[INDEX]
                 }
             });
-            th.start();
-            try{
-                th.join();
-            } catch (InterruptedException e){e.printStackTrace();}
+            th[INDEX].start();
         }
 
+        try{
+                for (int i = 0; i<countThread; i++) th[i].join();
+        } catch (InterruptedException e){e.printStackTrace();}
+        
         b = System.currentTimeMillis();             //фиксируем время окончания разбивки и начала подсчета
 
         for (int i = 0; i < countThread; i++) {
             final int INDEX = i;
-            Thread th =new Thread(new Runnable() {
+            th[INDEX] =new Thread(new Runnable() {
                 @Override
                 public void run() {
                     int length = SIZE/countThread;
@@ -108,18 +109,19 @@ public class ThreadDemo {
                     }
                 }
             });
-            th.start();
-            try{
-                th.join();
-            } catch (InterruptedException e){e.printStackTrace();}
+            th[INDEX].start();
         }
 
+        try{
+                for (int i = 0; i<countThread; i++) th[i].join();
+        } catch (InterruptedException e){e.printStackTrace();}
+        
         c = System.currentTimeMillis();         //фиксируем время окончания подсчета и начала склейки
 
         float[] arr1 = new float[SIZE];         //определяем новый массив в который будут копироваться данные локальных массивов
         for (int i = 0; i < countThread; i++) {
             final int INDEX = i;
-            Thread th = new Thread(new Runnable() {
+            th[INDEX] = new Thread(new Runnable() {
                 @Override
                 public void run() {
                     int length = SIZE/countThread;
@@ -127,12 +129,13 @@ public class ThreadDemo {
                     System.arraycopy(localArr[INDEX], 0, arr1, scrPos, length);
                 }
             });
-            th.start();
-            try{
-                th.join();
-            } catch (InterruptedException e){e.printStackTrace();}
+            th[INDEX].start();
         }
 
+        try{
+             for (int i = 0; i<countThread; i++) th[i].join();
+        } catch (InterruptedException e){e.printStackTrace();}
+        
         d = System.currentTimeMillis();         //фиксируем время окончания склейки
 
         System.out.println("Метод с " + countThread + " потоком\\потоками.");
