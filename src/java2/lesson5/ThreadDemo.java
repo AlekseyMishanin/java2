@@ -82,10 +82,11 @@ public class ThreadDemo {
             th[INDEX] = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    int length = SIZE/countThread;          //размер локального массива localArr[INDEX]
+                    int length = (int)Math.ceil(SIZE/countThread*1.0);                               //размер локального массива localArr[INDEX]
+                    int length_ = length*INDEX>SIZE ? SIZE-length*(INDEX-1) : length;          //размер локального массива localArr[INDEX]
                     int scrPos = length*INDEX;              //начальная позиция для копирования данных из arr в localArr[INDEX]
-                    localArr[INDEX] = new float[length];
-                    System.arraycopy(arr,scrPos,localArr[INDEX],0,length); //копируем данные в localArr[INDEX]
+                    localArr[INDEX] = new float[length_];
+                    System.arraycopy(arr,scrPos,localArr[INDEX],0,length_); //копируем данные в localArr[INDEX]
                 }
             });
             th[INDEX].start();
@@ -102,8 +103,9 @@ public class ThreadDemo {
             th[INDEX] =new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    int length = SIZE/countThread;
-                    for (int j = 0; j < length-1; j++) {
+                    int length = (int)Math.ceil(SIZE/countThread*1.0);
+                    int length_ = length*INDEX>SIZE ? SIZE-length*(INDEX-1) : length;          //размер локального массива localArr[INDEX]
+                    for (int j = 0; j < length_; j++) {
                         localArr[INDEX][j] = (float)(localArr[INDEX][j] * Math.sin(0.2f + (j+length*INDEX) / 5) * Math.cos(0.2f + (j+length*INDEX) / 5) * Math.cos(0.4f + (j+length*INDEX) / 2));
 
                     }
@@ -124,9 +126,10 @@ public class ThreadDemo {
             th[INDEX] = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    int length = SIZE/countThread;
+                    int length = (int)Math.ceil(SIZE/countThread*1.0);
+                    int length_ = length*INDEX>SIZE ? SIZE-length*(INDEX-1) : length;          //размер локального массива localArr[INDEX]
                     int scrPos = length*INDEX;
-                    System.arraycopy(localArr[INDEX], 0, arr1, scrPos, length);
+                    System.arraycopy(localArr[INDEX], 0, arr1, scrPos, length_);
                 }
             });
             th[INDEX].start();
@@ -142,7 +145,8 @@ public class ThreadDemo {
         System.out.println("Деление исходного массива на " + countThread + " локальных массива: " + (b-a));
         System.out.println("Обработка данных локальных массивов: " + (c-b));
         System.out.println("Склейка локальных массивов: " + (d-c));
-        System.out.println("Всего затрачено времени на обработку массива: " + (d-a));
+        System.out.println( "Всего затрачено времени на обработку массива: " + (d-a));
+        for(float temp : arr1) {System.out.println(temp + " ");}
     }
 }
 
